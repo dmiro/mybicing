@@ -42,6 +42,13 @@ def get_geojson(stations):
 
 stations = get_stations()
 
+with open('data/stations.geojson', 'w') as f:
+    geojson = get_geojson(stations)
+    f.write(geojson)
+
+"""
+stations = get_stations()
+
 print 'closed stations:'
 for station in stations.itervalues():
     if station['status'] != 'OPN':
@@ -55,4 +62,4 @@ for station in stations.itervalues():
         print station['type']
 
 print get_geojson(stations)
-
+"""
