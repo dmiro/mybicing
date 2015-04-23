@@ -1,6 +1,7 @@
 import urllib2
 import xml.etree.ElementTree as ET
-    
+
+
 def get_stations_from_file(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
@@ -30,11 +31,28 @@ def get_stations():
     return get_stations_from_file(filename)
 
 def get_geojson(stations):
-    FEATURE = '{"type":"Feature","id":"%d","properties":{"name":"%s %s"},"geometry": {"type": "Point","coordinates": [%f, %f]}}'
+    FEATURE = '{"type":"Feature","id":"%d","properties":{"name":"%s %s", "slots":"%d", "bikes":"%d", "status":"%s"},"geometry": {"type": "Point","coordinates": [%f, %f]}}'
     COLLECTION = '{"type":"FeatureCollection","features":[%s]}'
     features = []
     for station in stations.itervalues():
-        features.append(FEATURE % (station['id'], station['street'], station['streetNumber'], station['long'], station['lat']))
+        if station['status'] == 'CLS':
+            status = 'CLOSED'
+        elif station['bikes'] == 0:
+            status = 'EMPTY'
+        elif station['bikes'] < station['slots'] / 3:
+            status = 'HALF'
+        else:
+            status = 'OPEN'
+        features.append(FEATURE % (station['id'],
+                                   station['street'],
+                                   station['streetNumber'],
+                                   station['slots'],
+                                   station['bikes'],
+                                   status,
+                                   station['long'],
+                                   station['lat']
+                                   )
+                        )
     return COLLECTION % ','.join(features)
 
 
@@ -45,14 +63,15 @@ stations = get_stations()
 with open('data/stations.geojson', 'w') as f:
     geojson = get_geojson(stations)
     f.write(geojson)
-
+        
 """
 stations = get_stations()
 
 print 'closed stations:'
 for station in stations.itervalues():
     if station['status'] != 'OPN':
-        print station['long'], station['lat'], station['id'], station['status'], station['street'], station['streetNumber'], station['nearbyStationList']
+        print station['long'], station['lat'], station['id'], station['status'], 
+        station['street'], station['streetNumber'], station['nearbyStationList']
 
 print 'type stations:'
 tp = []
