@@ -6,7 +6,7 @@ $(document).ready(function() {
 			anchorXUnits: 'fraction',
 			anchorYUnits: 'pixels',
 			opacity: 0.75,
-			src: 'images/cycling_sport.png'
+			src: 'images/cycling_green.png'
 			}))
 	});
 		
