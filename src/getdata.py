@@ -31,7 +31,7 @@ def get_stations():
     return get_stations_from_file(filename)
 
 def get_geojson(stations):
-    FEATURE = '{"type":"Feature","id":"%d","properties":{"name":"%s %s", "slots":"%d", "bikes":"%d", "status":"%s"},"geometry": {"type": "Point","coordinates": [%f, %f]}}'
+    FEATURE = '{"type":"Feature","id":"%d","properties":{"name":"%s", "slots":"%d", "bikes":"%d", "status":"%s"},"geometry": {"type": "Point","coordinates": [%f, %f]}}'
     COLLECTION = '{"type":"FeatureCollection","features":[%s]}'
     features = []
     for station in stations.itervalues():
@@ -40,12 +40,14 @@ def get_geojson(stations):
         elif station['bikes'] == 0:
             status = 'EMPTY'
         elif station['bikes'] < station['slots'] / 3:
-            status = 'HALF'
+            status = 'FEW'
         else:
             status = 'OPEN'
+        name = station['street']
+        if station['streetNumber']:
+            name += (" " + station['streetNumber'])
         features.append(FEATURE % (station['id'],
-                                   station['street'],
-                                   station['streetNumber'],
+                                   name,
                                    station['slots'],
                                    station['bikes'],
                                    status,
