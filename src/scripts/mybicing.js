@@ -80,6 +80,10 @@ $(document).ready(function() {
 
   // change mouse cursor when over marker
   map.on('pointermove', function(e) {
+    if (e.dragging) {
+      $(element).popover('destroy');
+      return;
+    }
     var pixel = map.getEventPixel(e.originalEvent);
     var hit = map.hasFeatureAtPixel(pixel);
     $('#map').css('cursor', hit ? 'pointer' : '');
@@ -106,6 +110,12 @@ $(document).ready(function() {
       $(element).popover('destroy');
     }
   });
+
+  map.on('moveend', function(e){
+    $(element).popover('destroy');
+  });
+
+
 
 
 });
