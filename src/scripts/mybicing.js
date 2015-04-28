@@ -38,6 +38,37 @@ $(document).ready(function() {
     style: function(feature, res) { return selectedStationStyle(feature, res); }
 	});
 
+	
+window.app = {};
+var app = window.app;
+app.RotateNorthControl = function(opt_options) {
+
+  var options = opt_options || {};
+
+  var button = document.createElement('button');
+  button.innerHTML = 'N';
+
+  var this_ = this;
+  var handleRotateNorth = function(e) {
+    this_.getMap().getView().setRotation(0);
+  };
+
+  button.addEventListener('click', handleRotateNorth, false);
+  button.addEventListener('touchstart', handleRotateNorth, false);
+
+  var element = document.createElement('div');
+  element.className = 'rotate-north ol-unselectable ol-control';
+  element.appendChild(button);
+
+  ol.control.Control.call(this, {
+    element: element,
+    target: options.target
+  });
+
+};
+ol.inherits(app.RotateNorthControl, ol.control.Control);
+
+	
 	var map = new ol.Map({
     target: 'map',
 		layers: [
@@ -56,10 +87,12 @@ $(document).ready(function() {
       })
 		],
 		controls: ol.control.defaults({
-			attributionOptions: ({
-				collapsible: false
+			attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+			  collapsible: false
 			})
-		}),
+		  }).extend([
+			new app.RotateNorthControl()
+		  ]),
 		view: new ol.View({
 			center: ol.proj.transform([2.1700471, 41.3870154], 'EPSG:4326', 'EPSG:3857'),
 			zoom: 15
@@ -124,6 +157,7 @@ $(document).ready(function() {
  http://oobrien.com/2015/01/openlayers-3-and-vector-data/
  http://openlayers.org/en/v3.4.0/examples/custom-controls.html
  http://openlayers.org/en/v3.4.0/examples/icon.html
+ http://openlayers.org/en/v3.4.0/examples/custom-controls.js
 */
 
 

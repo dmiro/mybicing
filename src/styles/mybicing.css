@@ -1,0 +1,44 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+header, section, footer, aside, nav, article, figure, figcaption, hgroup{
+	display: block;
+}
+
+
+body {
+	text-align: center;
+}
+
+#container {	
+	width: 80%;
+	margin: 0 auto; /*http://librosweb.es/libro/css/capitulo_12/centrar_una_pagina_horizontalmente.html*/
+}
+
+header {
+	padding: 20px;
+}
+
+section {
+	float:left;
+	width: 80%;
+	height:600px;
+}
+
+aside {
+	float:left;
+	width: 20%;
+	padding: 0px 0px 0px 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;    
+}
+
+footer {
+	clear:both;
+	margin: 10px;
+}
+
+
